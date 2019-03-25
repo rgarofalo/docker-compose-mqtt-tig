@@ -30,12 +30,13 @@ services:
       default:
         aliases:
          - ${CONTAINER_NAMESPACE}influxdb
-      nginx_proxy:
-
+      
   telegraf:
     container_name: telegraf
     image: telegraf
     hostname: telegraf
+    env_file:
+      - .env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
@@ -54,13 +55,13 @@ services:
     env_file:
       - .env
     environment:
-      - VIRTUAL_HOST=${CHRONOGRAF_HOST}
+      - VIRTUAL_HOST=${GRAFANA_HOST}
       - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=${CHRONOGRAF_HOST}
+      - LETSENCRYPT_HOST=${GRAFANA_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
       - INFLUXDB_URL=http://${CONTAINER_NAMESPACE}influxdb:8086
       - INFLUXDB_USERNAME=${INFLUXDB_READ_USER}
-      - INFLUXDB_PASSWORD=${INFLUXDB_READ_PASSWORD}
+      - INFLUXDB_PASSWORD=${INFLUXDB_READ_USER_PASSWORD}
     volumes:
       - grafana-data:/var/lib/grafana
     links:
@@ -70,7 +71,6 @@ services:
       default:
         aliases:
          - ${CONTAINER_NAMESPACE}grafana
-      nginx_proxy:
 
 
 
@@ -92,8 +92,11 @@ services:
       default:
         aliases:
          - ${CONTAINER_NAMESPACE}mqtt
-      nginx_proxy:
 
+networks:
+    default:
+       external:
+          name: nginx-proxy
 
 volumes:
   influxdb-data:
