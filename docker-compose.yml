@@ -26,6 +26,7 @@ services:
       - INFLUXDB_WRITE_USER_PASSWORD=${INFLUXDB_WRITE_USER_PASSWORD}
       - INFLUXDB_REPORTING_DISABLED=true
     restart: always
+    networks:
       default:
         aliases:
          - ${CONTAINER_NAMESPACE}influxdb
@@ -57,7 +58,7 @@ services:
       - VIRTUAL_PORT=3000
       - LETSENCRYPT_HOST=${CHRONOGRAF_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
-      - INFLUXDB_URL=http://${CONTAINER_NAMESPACE}influxdb:8886
+      - INFLUXDB_URL=http://${CONTAINER_NAMESPACE}influxdb:8086
       - INFLUXDB_USERNAME=${INFLUXDB_READ_USER}
       - INFLUXDB_PASSWORD=${INFLUXDB_READ_PASSWORD}
     volumes:
@@ -65,6 +66,13 @@ services:
     links:
       - influxdb
     restart: always
+    networks:
+      default:
+        aliases:
+         - ${CONTAINER_NAMESPACE}grafana
+      nginx_proxy:
+
+
 
   mqtt:
     container_name: mqtt
@@ -80,6 +88,12 @@ services:
       - LETSENCRYPT_HOST=${MQTT_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     restart: always
+    networks:
+      default:
+        aliases:
+         - ${CONTAINER_NAMESPACE}mqtt
+      nginx_proxy:
+
 
 volumes:
   influxdb-data:
