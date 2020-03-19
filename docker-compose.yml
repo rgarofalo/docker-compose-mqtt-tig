@@ -50,8 +50,6 @@ services:
     container_name: grafana
     image: grafana/grafana
     user: "0"
-    ports:
-      - 3000:3000
     env_file:
       - .env
     environment:
@@ -59,9 +57,7 @@ services:
       - VIRTUAL_PORT=3000
       - LETSENCRYPT_HOST=${GRAFANA_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
-      - INFLUXDB_URL=http://${CONTAINER_NAMESPACE}influxdb:8086
-      - INFLUXDB_USERNAME=${INFLUXDB_READ_USER}
-      - INFLUXDB_PASSWORD=${INFLUXDB_READ_USER_PASSWORD}
+
     volumes:
       - grafana-data:/var/lib/grafana
     links:
@@ -80,6 +76,9 @@ services:
     user: "0"
     volumes:
       - mqtt-data:/mosquitto/data
+      - ${LETSENCRYPT_CERT_ROOT_PATH}/${MQTT_HOST}:/etc/ssl/${MQTT_HOST}:ro
+    ports: 
+      - 9883:8883
     env_file:
       - .env
     environment:
