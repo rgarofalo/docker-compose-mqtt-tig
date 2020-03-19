@@ -1,0 +1,26 @@
+#################################### Server ####################################
+[server]
+
+domain = grafana.xxxxx.xx
+
+root_url = https://%(domain)s/
+
+
+#################################### Analytics ####################################
+[analytics]
+
+reporting_enabled = false
+
+#################################### SMTP / Emailing ##########################
+[smtp]
+enabled = true
+host = smtp.gmail.com:465
+user =xxxx@xxx.xx
+# If the password contains # or ; you have to wrap it with trippel quotes. Ex """#password;"""
+password = xx.
+
+skip_verify = true
+from_address = xxxx@xx.xx
+from_name = xxxxx
+
+
