@@ -1,7 +1,17 @@
+
 pid_file /var/run/mosquitto.pid
+
+port 8883
+
+cafile /etc/ssl/mqtt.company.io/chain.pem
+certfile /etc/ssl/mqtt.company.io/cert.pem
+keyfile /etc/ssl/mqtt.company.io/key.pem
+
+listener 1883
 
 persistence true
 persistence_location /mosquitto/data
 
-log_dest file /mosquitto/log/mosquitto.log
+allow_anonymous false
 
+password_file /mosquitto/config/passwd
